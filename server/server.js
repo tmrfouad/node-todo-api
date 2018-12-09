@@ -35,24 +35,25 @@ app.get('/todos', (req, res) => {
   );
 });
 
-// app
-//   .get('/todos/:id', (req, res) => {
-//     const id = req.params.id;
-//     if (!ObjectID.isValid(id)) {
-//       return res.status(404).send('Todo Id is invalid');
-//     }
+app.get('/todos/:id', (req, res) => {
+  const id = req.params.id;
 
-//     const todo = Todo.findById(id).then(todo => {
-//       if (!todo) {
-//         return res.status(404).send('Unable to find todo');
-//       }
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
 
-//       res.send({ todo });
-//     });
-//   })
-//   .catch(err => {
-//     res.status(400).send(err);
-//   });
+  Todo.findById(id)
+    .then(todo => {
+      if (!todo) {
+        return res.status(404).send();
+      }
+
+      res.send({ todo });
+    })
+    .catch(err => {
+      res.status(400).send();
+    });
+});
 
 app.listen(3000, () => {
   console.log('Started on port 3000');
